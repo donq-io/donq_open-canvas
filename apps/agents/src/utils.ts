@@ -365,19 +365,19 @@ export async function getModelFromConfig(
   const isLangChainUserModel = LANGCHAIN_USER_ONLY_MODELS.some(
     (m) => m === modelName
   );
-  if (isLangChainUserModel) {
-    const user = await getUserFromConfig(config);
-    if (!user) {
-      throw new Error(
-        "Unauthorized. Can not use LangChain only models without a user."
-      );
-    }
-    if (!user.email?.endsWith("@langchain.dev")) {
-      throw new Error(
-        "Unauthorized. Can not use LangChain only models without a user with a @langchain.dev email."
-      );
-    }
-  }
+  // if (isLangChainUserModel) {
+  //   const user = await getUserFromConfig(config);
+  //   if (!user) {
+  //     throw new Error(
+  //       "Unauthorized. Can not use LangChain only models without a user."
+  //     );
+  //   }
+  //   if (!user.email?.endsWith("@langchain.dev")) {
+  //     throw new Error(
+  //       "Unauthorized. Can not use LangChain only models without a user with a @langchain.dev email."
+  //     );
+  //   }
+  // }
 
   const includeStandardParams = !TEMPERATURE_EXCLUDED_MODELS.some(
     (m) => m === modelName
@@ -389,21 +389,21 @@ export async function getModelFromConfig(
     ...(includeStandardParams
       ? { maxTokens, temperature }
       : {
-          max_completion_tokens: maxTokens,
-          // streaming: false,
-          // disableStreaming: true,
-        }),
+        max_completion_tokens: maxTokens,
+        // streaming: false,
+        // disableStreaming: true,
+      }),
     ...(baseUrl ? { baseUrl } : {}),
     ...(apiKey ? { apiKey } : {}),
     ...(azureConfig != null
       ? {
-          azureOpenAIApiKey: azureConfig.azureOpenAIApiKey,
-          azureOpenAIApiInstanceName: azureConfig.azureOpenAIApiInstanceName,
-          azureOpenAIApiDeploymentName:
-            azureConfig.azureOpenAIApiDeploymentName,
-          azureOpenAIApiVersion: azureConfig.azureOpenAIApiVersion,
-          azureOpenAIBasePath: azureConfig.azureOpenAIBasePath,
-        }
+        azureOpenAIApiKey: azureConfig.azureOpenAIApiKey,
+        azureOpenAIApiInstanceName: azureConfig.azureOpenAIApiInstanceName,
+        azureOpenAIApiDeploymentName:
+          azureConfig.azureOpenAIApiDeploymentName,
+        azureOpenAIApiVersion: azureConfig.azureOpenAIApiVersion,
+        azureOpenAIBasePath: azureConfig.azureOpenAIBasePath,
+      }
       : {}),
   });
 }
@@ -594,8 +594,8 @@ export function formatMessages(messages: BaseMessage[]): string {
         typeof msg.content === "string"
           ? msg.content
           : msg.content
-              .flatMap((c) => ("text" in c ? (c.text as string) : []))
-              .join("\n");
+            .flatMap((c) => ("text" in c ? (c.text as string) : []))
+            .join("\n");
       return `<${msgType} index="${idx}">\n${messageContent}\n</${msgType}>`;
     })
     .join("\n");
