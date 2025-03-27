@@ -125,8 +125,7 @@ export default function ModelSelector({
 
   useEffect(() => {
     if (!user) return;
-    // setIsLangChainUser(user?.email?.endsWith("@langchain.dev") || false);
-    setIsLangChainUser(true);
+    setIsLangChainUser(user?.email?.endsWith("") || false);
   }, [user]);
 
   const handleModelChange = useCallback(
